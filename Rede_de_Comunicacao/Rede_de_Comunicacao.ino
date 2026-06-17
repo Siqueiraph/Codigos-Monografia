@@ -29,7 +29,7 @@ Projeto listaProjetos[4] = { // Projetos monitorados
   {"Irrigacao", "0.0.0.0", 0, false},
   {"Musical", "0.0.0.0", 0, false},
   {"Anemometro", "0.0.0.0", 0, false},
-  {"Girassol", "0.0.0.0", 0, false}
+  {"Balanca", "0.0.0.0", 0, false}
 };
 
 // --- FRONT-END HTML ---
