@@ -44,7 +44,7 @@ const char index_html[] PROGMEM = R"rawliteral(
   <meta charset="UTF-8">
   <title>Irrigação Automática</title>
   <style>
-    :root {--accent-blue: #1e90ff; --accent-green: #00ff00; --bg: #0a0a0a; --card-bg: #1a1a1a; --border: #333;}
+    :root {--accent-color: #00ff00; --bg: #0a0a0a; --card-bg: #1a1a1a; --border: #333;}
     * { box-sizing: border-box; }
     html { font-size: clamp(14px, 1.2vw, 18px); }
     body { font-family: 'Segoe UI', Arial, sans-serif; background-color: var(--bg); color: #ddd; margin: 0; padding: 20px; display: flex; justify-content: center; min-height: 100vh;}
@@ -77,9 +77,7 @@ const char index_html[] PROGMEM = R"rawliteral(
     .btn-saved { background-color: #4CAF50 !important; border-color: #4CAF50 !important; color: #000 !important; }
 
     /* ── Cards e Controles ── */
-    .card { background-color: var(--card-bg); padding: 18px 20px; border-radius: 10px; border-left: 5px solid; box-shadow: 0 4px 10px rgba(0,0,0,0.4); display: flex; flex-direction: column; justify-content: center;}
-    .c-calibra { border-color: var(--accent-blue); }
-    .c-rega    { border-color: var(--accent-green); }
+    .card { background-color: var(--card-bg); padding: 18px 20px; border-radius: 10px; border-left: 5px solid var(--accent-color); box-shadow: 0 4px 10px rgba(0,0,0,0.4); display: flex; flex-direction: column; justify-content: center;}
     h3 { margin: 0 0 16px 0; font-size: clamp(14px, 3vh, 22px); color: #aaa; border-bottom: 1px solid var(--border); padding-bottom: 8px; letter-spacing: 1px;}
   
     .control-row { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
@@ -214,9 +212,7 @@ const char index_html[] PROGMEM = R"rawliteral(
       let lim = limEl ? parseInt(limEl.value) : 30;
       let scale = canvas.height / 100;
       let yLim = canvas.height - (lim * scale);
-      ctx.setLineDash([5, 5]);
-      ctx.strokeStyle = 'rgba(255, 69, 0, 0.6)';
-      ctx.beginPath(); ctx.moveTo(0, yLim); ctx.lineTo(canvas.width, yLim); ctx.stroke();
+      ctx.setLineDash([5, 5]); ctx.strokeStyle = '#555'; ctx.beginPath(); ctx.moveTo(0, yLim); ctx.lineTo(canvas.width, yLim); ctx.stroke();
       ctx.setLineDash([]); ctx.strokeStyle = '#00ff00'; ctx.lineWidth = 3; ctx.beginPath();
       let step = canvas.width / (maxPts - 1);
       dataUmidade.forEach((v, i) => {

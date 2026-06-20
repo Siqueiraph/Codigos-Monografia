@@ -79,7 +79,7 @@ const char index_html[] PROGMEM = R"rawliteral(
     canvas { display: block; width: 100%; flex-grow: 1; }
     #dataOverlay { position: absolute; top: 14px; right: 20px; font-size: clamp(30px, 4vh, 40px); font-weight: bold; text-shadow: 2px 2px 6px #000; z-index: 10; font-family: monospace; text-align: right; line-height: 1.1;}
     .data-v { color: var(--accent-color); }
-    .data-w { color: #fff; }
+    .data-w { color: #ddd; }
     
     #btnSave { position: absolute; top: 14px; left: 14px; z-index: 10; padding: 10px 16px; font-size: 14px; font-weight: bold; background-color: #2a2a2a; color: white; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; transition: 0.2s; }
     #btnSave:hover { background: #3a3a3a; }
@@ -140,7 +140,7 @@ const char index_html[] PROGMEM = R"rawliteral(
       </div>
     </div>
   </div>
-   
+  
   <script>
     let dataVelocidade = [];
     let dataOmega = [];
@@ -228,10 +228,7 @@ const char index_html[] PROGMEM = R"rawliteral(
       let step = canvas.width / (maxPts - 1);
       
       // Desenha a curva da Velocidade Angular (rad/s) - Ciano
-      ctx.setLineDash([]); 
-      ctx.strokeStyle = 'rgba(0, 229, 255, 0.8)'; 
-      ctx.lineWidth = 2;
-      ctx.beginPath();
+      ctx.setLineDash([]); ctx.strokeStyle = '#ddd'; ctx.lineWidth = 2; ctx.beginPath();
       dataOmega.forEach((w, i) => {
         let x = i * step; let y = canvas.height - (w * scale);
         if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
@@ -239,10 +236,7 @@ const char index_html[] PROGMEM = R"rawliteral(
       ctx.stroke();
 
       // Desenha a curva da Velocidade do Vento (m/s) - Laranja
-      ctx.strokeStyle = 'rgba(255, 153, 0, 0.8)'; 
-      ctx.lineWidth = 3;
-      ctx.fillStyle = 'rgba(255, 153, 0, 0.1)';
-      ctx.beginPath();
+      ctx.strokeStyle = '#ff9900'; ctx.lineWidth = 3; ctx.beginPath();
       ctx.moveTo(0, canvas.height);
       dataVelocidade.forEach((v, i) => {
         let x = i * step; let y = canvas.height - (v * scale);

@@ -140,7 +140,7 @@ const char index_html[] PROGMEM = R"rawliteral(
 
     /* ── Cards e Controles ── */
     .card { background-color: var(--card-bg); padding: 18px 20px; border-radius: 10px; border-left: 5px solid; box-shadow: 0 4px 10px rgba(0,0,0,0.4); display: flex; flex-direction: column; justify-content: center;}
-    .c-master { border-color: #fff; }
+    .c-master { border-color: #ddd; }
     .c-grave  { border-color: #ff4500; }
     .c-medio  { border-color: #00ff00; }
     .c-agudo  { border-color: #1e90ff; }
@@ -416,7 +416,7 @@ void loop() {
   if (events.count() > 0 && (agora - lastPlotTime > 40)) {
     static char jsonBuf[48];
     snprintf(jsonBuf, sizeof(jsonBuf), "{\"g\":%d,\"m\":%d,\"a\":%d}",
-             (int)picoGrave, (int)picoMedio, (int)picoAgudo);
+            (int)picoGrave, (int)picoMedio, (int)picoAgudo);
     events.send(jsonBuf, "plot", agora);
     lastPlotTime = agora;
     picoGrave = picoMedio = picoAgudo = 0.0f;

@@ -73,7 +73,7 @@ const char index_html[] PROGMEM = R"rawliteral(
 
     canvas { display: block; width: 100%; flex-grow: 1; }
     #dataOverlay { position: absolute; top: 14px; right: 20px; font-size: clamp(30px, 4vh, 40px); font-weight: bold; text-shadow: 2px 2px 6px #000; z-index: 10; font-family: monospace; text-align: right; line-height: 1.1;}
-    .data-t { color: var(--accent-color); }
+    .data-T { color: var(--accent-color); }
     .data-m { color: #fff; }
     
     #btnSave { position: absolute; top: 14px; left: 14px; z-index: 10; padding: 10px 16px; font-size: 14px; font-weight: bold; background-color: #2a2a2a; color: white; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; transition: 0.2s; }
@@ -105,7 +105,7 @@ const char index_html[] PROGMEM = R"rawliteral(
     <div class="graph-wrapper">
       <button id="btnSave" onclick="saveData()">Salvar</button>
       <div id="dataOverlay">
-        <span class="data-t">T: <span id="perHtml">0.0</span> s</span><br>
+        <span class="data-T">T: <span id="perHtml">0.0</span> s</span><br>
         <span class="data-m">m: <span id="masHtml">0.0</span> g</span>
       </div>
       <canvas id="plotCanvas"></canvas>
@@ -135,7 +135,7 @@ const char index_html[] PROGMEM = R"rawliteral(
       </div>
     </div>
   </div>
-   
+  
   <script>
     let dataDistancia = [];
     const maxPts = 100;
@@ -348,8 +348,8 @@ void loop() {
   static unsigned long timeoutParado = 0;
   if (abs(distanciaAtual - picoTemp) < 0.2 && abs(distanciaAtual - fundoTemp) < 0.2) {
     if (agora - timeoutParado > 3000) {
-       periodoAtual = 0.0;
-       massaCalculada = 0.0;
+      periodoAtual = 0.0;
+      massaCalculada = 0.0;
     }
   } else {
     timeoutParado = agora;
