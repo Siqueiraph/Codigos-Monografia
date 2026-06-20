@@ -79,7 +79,7 @@ const char index_html[] PROGMEM = R"rawliteral(
     canvas { display: block; width: 100%; flex-grow: 1; }
     #dataOverlay { position: absolute; top: 14px; right: 20px; font-size: clamp(30px, 4vh, 40px); font-weight: bold; text-shadow: 2px 2px 6px #000; z-index: 10; font-family: monospace; text-align: right; line-height: 1.1;}
     .data-v { color: var(--accent-color); }
-    .data-w { color: var(--omega-color); font-size: clamp(20px, 3vh, 30px); }
+    .data-w { color: #fff; }
     
     #btnSave { position: absolute; top: 14px; left: 14px; z-index: 10; padding: 10px 16px; font-size: 14px; font-weight: bold; background-color: #2a2a2a; color: white; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; transition: 0.2s; }
     #btnSave:hover { background: #3a3a3a; }
@@ -110,8 +110,8 @@ const char index_html[] PROGMEM = R"rawliteral(
     <div class="graph-wrapper">
       <button id="btnSave" onclick="saveData()">Salvar</button>
       <div id="dataOverlay">
-        <span class="data-v"><span id="velHtml">0.0</span> m/s</span><br>
-        <span class="data-w"><span id="omegaHtml">0.0</span> rad/s</span>
+        <span class="data-v">v: <span id="velHtml">0.0</span> m/s</span><br>
+        <span class="data-w">w: <span id="omegaHtml">0.0</span> rad/s</span>
       </div>
       <canvas id="plotCanvas"></canvas>
     </div>

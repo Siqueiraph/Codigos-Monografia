@@ -113,11 +113,11 @@ const char index_html[] PROGMEM = R"rawliteral(
   <div class="main-container">
     <div class="graph-wrapper">
       <button id="btnSave" onclick="saveData()">Salvar</button>
-      <div id="humOverlay">--%</div>
+      <div id="humOverlay">0.0 %</div>
       <canvas id="plotCanvas"></canvas>
     </div>
     <div class="card c-calibra">
-      <h3>CALIBRAÇÃO ADC</h3>
+      <h3>CALIBRAÇÃO</h3>
       <div class="control-row">
         <label>Seco</label>
         <button class="step-btn" onclick="stepValue('vSeco', -50)">-</button>
@@ -201,7 +201,7 @@ const char index_html[] PROGMEM = R"rawliteral(
 
     setInterval(function() {
       fetch('/dados').then(res => res.json()).then(data => {
-        document.getElementById('humOverlay').innerText = data.umidade + "%";
+        document.getElementById('humOverlay').innerText = data.umidade + " %";
         dataUmidade.push(data.umidade);
         if(dataUmidade.length > maxPts) dataUmidade.shift();
         drawCanvas();
