@@ -50,8 +50,7 @@ unsigned long lastPlotTime  = 0;
 // Picos inter-ciclos: acumulam o maior valor entre transmissões do gráfico
 float picoGrave = 0, picoMedio = 0, picoAgudo = 0;
 
-// MOTOR DSP: FILTRO IIR BIQUAD (Forma Direta II Transposta)
-struct FiltroBiquad {
+struct FiltroBiquad { // MOTOR DSP: FILTRO IIR BIQUAD
     float b0, b1, b2; // Coeficientes do numerador
     float a1, a2;     // Coeficientes do denominador (a0 normalizado para 1)
     float z1, z2;     // Linhas de atraso (memória do filtro entre amostras)
@@ -97,7 +96,7 @@ FiltroBiquad filtroGrave;
 FiltroBiquad filtroMedio;
 FiltroBiquad filtroAgudo;
 
-// FRONT-END HTML (armazenado na flash, não na RAM)
+// FRONT-END HTML
 const char index_html[] PROGMEM = R"rawliteral(
 <!DOCTYPE HTML><html>
 <head>
@@ -105,7 +104,7 @@ const char index_html[] PROGMEM = R"rawliteral(
   <meta charset="UTF-8">
   <title>Controle Musical</title>
   <style>
-    :root {--bg: #0a0a0a; --card-bg: #1a1a1a; --border: #333; --text-muted: #888;}
+    :root {--bg: #0a0a0a; --card-bg: #1a1a1a; --border: #333; }
     * { box-sizing: border-box; }
     html { font-size: clamp(14px, 1.2vw, 18px); }
     body { font-family: 'Segoe UI', Arial, sans-serif; background-color: var(--bg); color: #ddd; margin: 0; padding: 20px; display: flex; justify-content: center; min-height: 100vh;}
@@ -251,8 +250,7 @@ const char index_html[] PROGMEM = R"rawliteral(
 </html>
 )rawliteral";
 
-// CONFIGURAÇÃO DO DRIVER I2S (DMA)
-void setupI2S() {
+void setupI2S() { // CONFIGURAÇÃO DO DRIVER I2S (DMA)
   const i2s_config_t i2s_config = {
     .mode                 = (i2s_mode_t)(I2S_MODE_MASTER | I2S_MODE_RX),
     .sample_rate          = (int)FREQUENCIA_AMOSTRAGEM,
@@ -276,8 +274,7 @@ void setupI2S() {
   i2s_set_pin(I2S_PORT, &pin_config);
 }
 
-// CONEXÃO WI-FI
-void conectarWiFi() {
+void conectarWiFi() { // CONEXÃO WI-FI
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
   int tentativas = 0;
@@ -285,8 +282,7 @@ void conectarWiFi() {
   if (MDNS.begin("Musical")) { MDNS.addService("http", "tcp", 80); }
 }
 
-// SETUP
-void setup() {
+void setup() { // SETUP
   pinMode(PINO_RELE_GRAVE, OUTPUT); digitalWrite(PINO_RELE_GRAVE, HIGH);
   pinMode(PINO_RELE_MEDIO, OUTPUT); digitalWrite(PINO_RELE_MEDIO, HIGH);
   pinMode(PINO_RELE_AGUDO, OUTPUT); digitalWrite(PINO_RELE_AGUDO, HIGH);
@@ -366,8 +362,7 @@ void controlarCanal(int pino, float volume, int limiar, unsigned long &lastOn) {
   }
 }
 
-// LOOP PRINCIPAL
-void loop() {
+void loop() { // LOOP PRINCIPAL
   unsigned long agora = millis();
 
   float picoBlocoG = 0, picoBlocoM = 0, picoBlocoA = 0;

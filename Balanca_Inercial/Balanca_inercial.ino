@@ -35,9 +35,9 @@ unsigned long tempoUltimoPico = 0;
 unsigned long somaPeriodos    = 0;
 
 // Resultados para o Front-End
-float distanciaAtual = 0.0;
-float periodoAtual   = 0.0;
-float massaCalculada = 0.0; // Em gramas
+float distancia = 0.0;
+float periodo   = 0.0;
+float massa = 0.0; // Em gramas
 
 // FRONT-END HTML
 const char index_html[] PROGMEM = R"rawliteral(
@@ -47,7 +47,7 @@ const char index_html[] PROGMEM = R"rawliteral(
   <meta charset="UTF-8">
   <title>Balança Inercial</title>
   <style>
-    :root {--accent-color: #9c27b0; --omega-color: #808080; --bg: #0a0a0a; --card-bg: #1a1a1a; --border: #333;}
+    :root {--accent-color: #9c27b0; --bg: #0a0a0a; --card-bg: #1a1a1a; --border: #333;}
     * { box-sizing: border-box; }
     html { font-size: clamp(14px, 1.2vw, 18px); }
     body { font-family: 'Segoe UI', Arial, sans-serif; background-color: var(--bg); color: #ddd; margin: 0; padding: 20px; display: flex; justify-content: center; min-height: 100vh;}
@@ -222,7 +222,7 @@ const char index_html[] PROGMEM = R"rawliteral(
 </html>
 )rawliteral";
 
-void conectarWiFi() {
+void conectarWiFi() { // CONEXÃO WI-FI
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
   int tentativas = 0;
@@ -230,7 +230,7 @@ void conectarWiFi() {
   if (MDNS.begin("Balanca")) MDNS.addService("http", "tcp", 80);
 }
 
-void setup() {
+void setup() { // SETUP
   pinMode(PINO_TRIG, OUTPUT);
   pinMode(PINO_ECHO, INPUT);
 
@@ -253,9 +253,9 @@ void setup() {
   });
 
   server.on("/dados", HTTP_GET, [](AsyncWebServerRequest *request) {
-    String json = "{\"h\":" + String(distanciaAtual) +
-                  ",\"T\":" + String(periodoAtual) +
-                  ",\"m\":" + String(massaCalculada) + "}";
+    String json = "{\"h\":" + String(distancia) +
+                  ",\"T\":" + String(periodo) +
+                  ",\"m\":" + String(massa) + "}";
     request->send(200, "application/json", json);
   });
 
@@ -276,7 +276,7 @@ void setup() {
   server.begin();
 }
 
-void loop() {
+void loop() { // LOOP PRINCIPAL
   unsigned long agora = millis();
   static unsigned long tempoUltimaLeitura = 0;
 
@@ -299,7 +299,7 @@ void loop() {
       
       // Filtro EMA (Média Móvel Exponencial) para atenuar o ruído ultrassônico
       distFiltrada = (0.3 * distRaw) + (0.7 * distFiltrada);
-      distanciaAtual = distFiltrada;
+      distancia = distFiltrada;
 
       // --- ALGORITMO DETECTOR DE PICOS COM HISTERESE ---
       float threshold = 0.5; // Margem em cm para descartar ruídos minúsculos
@@ -319,11 +319,11 @@ void loop() {
             contagemCiclos++;
             
             if (contagemCiclos >= numCiclos) {
-              periodoAtual = (somaPeriodos / (float)numCiclos) / 1000.0; // T em segundos
+              periodo = (somaPeriodos / (float)numCiclos) / 1000.0; // T em segundos
               
               // T = 2*PI * sqrt(m/k) -> m = k * (T / 2*PI)^2
               // Multiplica por 1000 para exibir em gramas
-              massaCalculada = constanteK * pow(periodoAtual / (2.0 * PI), 2) * 1000.0;
+              massa = constanteK * pow(periodo / (2.0 * PI), 2) * 1000.0;
               
               somaPeriodos = 0;
               contagemCiclos = 0;
@@ -346,16 +346,16 @@ void loop() {
 
   // Timeout geral de oscilação: se o copo parar por muito tempo, zera
   static unsigned long timeoutParado = 0;
-  if (abs(distanciaAtual - picoTemp) < 0.2 && abs(distanciaAtual - fundoTemp) < 0.2) {
+  if (abs(distancia - picoTemp) < 0.2 && abs(distancia - fundoTemp) < 0.2) {
     if (agora - timeoutParado > 3000) {
-      periodoAtual = 0.0;
-      massaCalculada = 0.0;
+      periodo = 0.0;
+      massa = 0.0;
     }
   } else {
     timeoutParado = agora;
   }
 
-  // Ping para o Módulo Central [cite: 261, 262]
+  // Ping para o Módulo Central
   static unsigned long lastPing = 0;
   if (agora - lastPing > 5000) {
     lastPing = agora;

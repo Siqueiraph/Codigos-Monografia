@@ -52,7 +52,7 @@ const char index_html[] PROGMEM = R"rawliteral(
   <meta charset="UTF-8">
   <title>Anemômetro Digital</title>
   <style>
-    :root {--accent-color: #ff9900; --omega-color: #808080; --bg: #0a0a0a; --card-bg: #1a1a1a; --border: #333;}
+    :root {--accent-color: #ff9900; --bg: #0a0a0a; --card-bg: #1a1a1a; --border: #333;}
     * { box-sizing: border-box; }
     html { font-size: clamp(14px, 1.2vw, 18px); }
     body { font-family: 'Segoe UI', Arial, sans-serif; background-color: var(--bg); color: #ddd; margin: 0; padding: 20px; display: flex; justify-content: center; min-height: 100vh;}
@@ -252,7 +252,7 @@ const char index_html[] PROGMEM = R"rawliteral(
 </html>
 )rawliteral";
 
-void conectarWiFi() {
+void conectarWiFi() { // CONEXÃO WI-FI
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
   int tentativas = 0;
@@ -260,7 +260,7 @@ void conectarWiFi() {
   if (MDNS.begin("Anemometro")) MDNS.addService("http", "tcp", 80);
 }
 
-void setup() {
+void setup() { // SETUP
   pinMode(PINO_HALL, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(PINO_HALL), ISR_DetectaIma, FALLING);
 
@@ -305,7 +305,7 @@ void setup() {
   server.begin();
 }
 
-void loop() {
+void loop() { // LOOP PRINCIPAL
   unsigned long agora = millis();
   
   // Cálculo da Física

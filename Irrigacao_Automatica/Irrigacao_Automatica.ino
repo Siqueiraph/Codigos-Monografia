@@ -34,9 +34,9 @@ unsigned long inicioRega    = 0;
 unsigned long fimUltimaRega = 0;
 
 // Leitura atual — atualizada no loop(), lida pelas rotas HTTP
-int umidadeAtual = 0;
+int umidade = 0;
 
-// FRONT-END HTML (armazenado na flash, não na RAM)
+// FRONT-END HTML
 const char index_html[] PROGMEM = R"rawliteral(
 <!DOCTYPE HTML><html>
 <head>
@@ -71,7 +71,7 @@ const char index_html[] PROGMEM = R"rawliteral(
 
     /* ── Elementos do Gráfico ── */
     canvas { display: block; width: 100%; flex-grow: 1; }
-    #humOverlay { position: absolute; top: 14px; right: 20px; font-size: clamp(36px, 5vh, 50px); font-weight: bold; color: var(--accent-green); text-shadow: 2px 2px 6px #000; z-index: 10; font-family: monospace; }
+    #humOverlay { position: absolute; top: 14px; right: 20px; font-size: clamp(36px, 5vh, 50px); font-weight: bold; color: var(--accent-color); text-shadow: 2px 2px 6px #000; z-index: 10; font-family: monospace; }
     #btnSave { position: absolute; top: 14px; left: 14px; z-index: 10; padding: 10px 16px; font-size: 14px; font-weight: bold; background-color: #2a2a2a; color: white; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; transition: 0.2s; }
     #btnSave:hover { background: #3a3a3a; }
     .btn-saved { background-color: #4CAF50 !important; border-color: #4CAF50 !important; color: #000 !important; }
@@ -226,8 +226,7 @@ const char index_html[] PROGMEM = R"rawliteral(
 </html>
 )rawliteral";
 
-// CONEXÃO WI-FI
-void conectarWiFi() {
+void conectarWiFi() { // CONEXÃO WI-FI
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
   int tentativas = 0;
@@ -235,8 +234,7 @@ void conectarWiFi() {
   if (MDNS.begin("Irrigacao")) MDNS.addService("http", "tcp", 80);
 }
 
-// SETUP
-void setup() {
+void setup() { // SETUP
   pinMode(PINO_RELE, OUTPUT);
   digitalWrite(PINO_RELE, LOW);
 
@@ -259,7 +257,7 @@ void setup() {
   });
 
   server.on("/dados", HTTP_GET, [](AsyncWebServerRequest *request) {
-    String json = "{\"umidade\":"     + String(umidadeAtual) +
+    String json = "{\"umidade\":"     + String(umidade) +
                   ",\"statusBomba\":" + String(bombaLigada)  + "}";
     request->send(200, "application/json", json);
   });
@@ -287,18 +285,17 @@ void setup() {
   server.begin();
 }
 
-// LOOP PRINCIPAL
-void loop() {
+void loop() { // LOOP PRINCIPAL
   unsigned long agora = millis();
 
   // --- 1. LEITURA E CONVERSÃO DO SENSOR ---
   int leitura = analogRead(PINO_SENSOR);
-  umidadeAtual = constrain(map(leitura, valSeco, valUmido, 0, 100), 0, 100);
+  umidade = constrain(map(leitura, valSeco, valUmido, 0, 100), 0, 100);
 
   // --- 2. CONTROLE DA BOMBA ---
   if (!bombaLigada) {
     bool cooldownEncerrado = (fimUltimaRega == 0) || (agora - fimUltimaRega >= COOLDOWN_REGA_MS);
-    if (umidadeAtual < limiteLigar && cooldownEncerrado) {
+    if (umidade < limiteLigar && cooldownEncerrado) {
       bombaLigada = true;
       inicioRega  = agora;
       digitalWrite(PINO_RELE, HIGH);
