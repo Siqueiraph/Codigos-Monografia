@@ -47,10 +47,10 @@ const char index_html[] PROGMEM = R"rawliteral(
   <meta charset="UTF-8">
   <title>Balança Inercial</title>
   <style>
-    :root {--destaque: #9c27b0; --preto: #0a0a0a; --cinzaE: #1a1a1a; --cinzaC: #333;}
+    :root {--destaque: #9c27b0; --preto1: #0a0a0a; --preto2: #1a1a1a; --cinza1: #333; --cinza2: #ccc; --branco: #fff;}
     * { box-sizing: border-box; }
     html { font-size: clamp(14px, 1.2vw, 18px); }
-    body { font-family: 'Segoe UI', Arial, sans-serif; background-color: var(--preto); color: #ddd; margin: 0; padding: 20px; display: flex; justify-content: center; min-height: 100vh;}
+    body { font-family: 'Segoe UI', Arial, sans-serif; background-color: var(--preto1); color: var(--cinza2); margin: 0; padding: 20px; display: flex; justify-content: center; min-height: 100vh;}
 
     .main-container { 
       display: grid; 
@@ -66,30 +66,30 @@ const char index_html[] PROGMEM = R"rawliteral(
       grid-column: 1;
       grid-row: 1 / 3; 
       position: relative;
-      background: #000; border: 1px solid var(--cinzaC); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; min-height: 250px;
+      background: var(--preto1); border: 1px solid var(--cinza1); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; min-height: 250px;
     }
     .c-fisica  { grid-column: 2; grid-row: 1 / 2; }
     .c-sensor  { grid-column: 2; grid-row: 2 / 3; }
 
     canvas { display: block; width: 100%; flex-grow: 1; }
-    #dataOverlay { position: absolute; top: 14px; right: 20px; font-size: clamp(30px, 4vh, 40px); font-weight: bold; text-shadow: 2px 2px 6px #000; z-index: 10; font-family: monospace; text-align: right; line-height: 1.1;}
+    #dataOverlay { position: absolute; top: 14px; right: 20px; font-size: clamp(30px, 4vh, 40px); font-weight: bold; text-shadow: 2px 2px 6px var(--preto1); z-index: 10; font-family: monospace; text-align: right; line-height: 1.1;}
     .data-T { color: var(--destaque); }
-    .data-m { color: #fff; }
+    .data-m { color: var(--cinza2); }
     
-    #btnSave { position: absolute; top: 14px; left: 14px; z-index: 10; padding: 10px 16px; font-size: 14px; font-weight: bold; background-color: #2a2a2a; color: white; border: 1px solid var(--cinzaC); border-radius: 6px; cursor: pointer; transition: 0.2s; }
-    #btnSave:hover { background: #3a3a3a; }
-    .btn-saved { background-color: #4CAF50 !important; border-color: #4CAF50 !important; color: #000 !important; }
+    #btnSave { position: absolute; top: 14px; left: 14px; z-index: 10; padding: 10px 16px; font-size: 14px; font-weight: bold; background-color: var(--preto2); color: var(--branco); border: 1px solid var(--cinza1); border-radius: 6px; cursor: pointer; transition: 0.2s; }
+    #btnSave:hover { filter: brightness(1.4); }
+    .btn-saved { background-color: #4CAF50 !important; border-color: #4CAF50 !important; color: var(--preto1) !important; }
 
-    .card { background-color: var(--cinzaE); padding: 18px 20px; border-radius: 10px; border-left: 5px solid var(--destaque); box-shadow: 0 4px 10px rgba(0,0,0,0.4); display: flex; flex-direction: column; justify-content: center;}
-    h3 { margin: 0 0 16px 0; font-size: clamp(14px, 3vh, 22px); color: #aaa; border-bottom: 1px solid var(--cinzaC); padding-bottom: 8px; letter-spacing: 1px;}
+    .card { background-color: var(--preto2); padding: 18px 20px; border-radius: 10px; border-left: 5px solid var(--destaque); box-shadow: 0 4px 10px rgba(0,0,0,0.4); display: flex; flex-direction: column; justify-content: center;}
+    h3 { margin: 0 0 16px 0; font-size: clamp(14px, 3vh, 22px); color: var(--cinza2); border-bottom: 1px solid var(--cinza1); padding-bottom: 8px; letter-spacing: 1px;}
   
     .control-row { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
-    .control-row label { width: 80px; font-size: clamp(12px, 2.5vh, 16px); color: #ccc; font-weight: bold; flex-shrink: 0; }
-    .step-btn { background-color: #2a2a2a; color: white; border: 1px solid var(--cinzaC); border-radius: 6px; width: 36px; height: 36px; font-size: 18px; font-weight: bold; cursor: pointer; flex-shrink: 0; transition: 0.2s; }
-    .step-btn:hover { background: #3a3a3a; }
+    .control-row label { width: 80px; font-size: clamp(12px, 2.5vh, 16px); color: var(--cinza2); font-weight: bold; flex-shrink: 0; }
+    .step-btn { background-color: var(--preto2); color: var(--branco); border: 1px solid var(--cinza1); border-radius: 6px; width: 36px; height: 36px; font-size: 18px; font-weight: bold; cursor: pointer; flex-shrink: 0; transition: 0.2s; }
+    .step-btn:hover { filter: brightness(1.4); }
     
-    input[type=number] { flex: 1; background: #2a2a2a; color: #ddd; border: 1px solid var(--cinzaC); border-radius: 6px; padding: 8px; font-family: monospace; font-size: clamp(14px, 3vh, 18px); font-weight: bold; text-align: center; min-width: 0; }
-    input[type=number]:focus { outline: none; border-color: #888; }
+    input[type=number] { flex: 1; background: var(--preto2); color: var(--cinza2); border: 1px solid var(--cinza1); border-radius: 6px; padding: 8px; font-family: monospace; font-size: clamp(14px, 3vh, 18px); font-weight: bold; text-align: center; min-width: 0; }
+    input[type=number]:focus { outline: none; filter: brightness(1.3); }
     input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
 
     @media (max-width: 768px) {
@@ -114,9 +114,9 @@ const char index_html[] PROGMEM = R"rawliteral(
       <h3>FÍSICA O.H.S.</h3>
       <div class="control-row">
         <label>k (N/m)</label>
-        <button class="step-btn" onclick="stepFloat('k', -0.5)">-</button>
-        <input type="number" step="0.5" min="0.5" max="100.0" id="k" onchange="sendData()">
-        <button class="step-btn" onclick="stepFloat('k', 0.5)">+</button>
+        <button class="step-btn" onclick="stepFloat('k', -0.1)">-</button>
+        <input type="number" step="0.1" min="0.5" max="100.0" id="k" onchange="sendData()">
+        <button class="step-btn" onclick="stepFloat('k', 0.1)">+</button>
       </div>
     </div>
     <div class="card c-sensor">

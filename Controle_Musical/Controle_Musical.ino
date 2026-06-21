@@ -102,10 +102,10 @@ const char index_html[] PROGMEM = R"rawliteral(
   <meta charset="UTF-8">
   <title>Controle Musical</title>
   <style>
-    :root {--preto: #0a0a0a; --cinzaE: #1a1a1a; --cinzaC: #333; }
+    :root {--preto1: #0a0a0a; --preto2: #1a1a1a; --cinza1: #333; --cinza2: #ccc; --branco: #fff; }
     * { box-sizing: border-box; }
     html { font-size: clamp(14px, 1.2vw, 18px); }
-    body { font-family: 'Segoe UI', Arial, sans-serif; background-color: var(--preto); color: #ddd; margin: 0; padding: 20px; display: flex; justify-content: center; min-height: 100vh;}
+    body { font-family: 'Segoe UI', Arial, sans-serif; background-color: var(--preto1); color: var(--cinza2); margin: 0; padding: 20px; display: flex; justify-content: center; min-height: 100vh;}
 
     /* ── Malha CSS Grid ── */
     .main-container { 
@@ -122,7 +122,7 @@ const char index_html[] PROGMEM = R"rawliteral(
     .graph-wrapper {
       grid-column: 1;
       grid-row: 1 / 3;
-      position: relative; background: #000; border: 1px solid var(--cinzaC); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; min-height: 250px;
+      position: relative; background: var(--preto1); border: 1px solid var(--cinza1); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; min-height: 250px;
     }
     .c-master { grid-column: 1; grid-row: 3; }
     .c-grave  { grid-column: 2; grid-row: 1; }
@@ -131,25 +131,25 @@ const char index_html[] PROGMEM = R"rawliteral(
 
     /* ── Gráfico ── */
     canvas { display: block; width: 100%; flex-grow: 1; }
-    #btnSave { position: absolute; top: 14px; left: 14px; z-index: 10; padding: 10px 16px; font-size: 14px; font-weight: bold; background-color: #2a2a2a; color: white; border: 1px solid var(--cinzaC); border-radius: 6px; cursor: pointer; transition: 0.2s; }
-    #btnSave:hover { background: #3a3a3a; }
-    .btn-saved { background-color: #4CAF50 !important; border-color: #4CAF50 !important; color: #000 !important; }
+    #btnSave { position: absolute; top: 14px; left: 14px; z-index: 10; padding: 10px 16px; font-size: 14px; font-weight: bold; background-color: var(--preto2); color: var(--branco); border: 1px solid var(--cinza1); border-radius: 6px; cursor: pointer; transition: 0.2s; }
+    #btnSave:hover { filter: brightness(1.4); }
+    .btn-saved { background-color: #4CAF50 !important; border-color: #4CAF50 !important; color: var(--preto1) !important; }
 
     /* ── Cards e Controles ── */
-    .card { background-color: var(--cinzaE); padding: 18px 20px; border-radius: 10px; border-left: 5px solid; box-shadow: 0 4px 10px rgba(0,0,0,0.4); display: flex; flex-direction: column; justify-content: center;}
+    .card { background-color: var(--preto2); padding: 18px 20px; border-radius: 10px; border-left: 5px solid; box-shadow: 0 4px 10px rgba(0,0,0,0.4); display: flex; flex-direction: column; justify-content: center;}
     .c-master { border-color: #ddd; }
     .c-grave  { border-color: #ff4500; }
     .c-medio  { border-color: #00ff00; }
     .c-agudo  { border-color: #1e90ff; }
-    h3 { margin: 0 0 16px 0; font-size: clamp(14px, 3vh, 22px); color: #aaa; border-bottom: 1px solid var(--cinzaC); padding-bottom: 8px; letter-spacing: 1px;}
+    h3 { margin: 0 0 16px 0; font-size: clamp(14px, 3vh, 22px); color: var(--cinza2); border-bottom: 1px solid var(--cinza1); padding-bottom: 8px; letter-spacing: 1px;}
     
     .control-row { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
-    .control-row label { width: 60px; font-size: clamp(12px, 2.5vh, 16px); color: #ccc; font-weight: bold; flex-shrink: 0; }
-    .step-btn { background-color: #2a2a2a; color: white; border: 1px solid var(--cinzaC); border-radius: 6px; width: 36px; height: 36px; font-size: 18px; font-weight: bold; cursor: pointer; flex-shrink: 0; transition: 0.2s; }
-    .step-btn:hover { background: #3a3a3a; }
+    .control-row label { width: 60px; font-size: clamp(12px, 2.5vh, 16px); color: var(--cinza2); font-weight: bold; flex-shrink: 0; }
+    .step-btn { background-color: var(--preto2); color: var(--branco); border: 1px solid var(--cinza1); border-radius: 6px; width: 36px; height: 36px; font-size: 18px; font-weight: bold; cursor: pointer; flex-shrink: 0; transition: 0.2s; }
+    .step-btn:hover { filter: brightness(1.4); }
 
-    input[type=number] { flex: 1; background: #2a2a2a; color: #ddd; border: 1px solid var(--cinzaC); border-radius: 6px; padding: 8px; font-family: monospace; font-size: clamp(14px, 3vh, 18px); font-weight: bold; text-align: center; min-width: 0; }
-    input[type=number]:focus { outline: none; border-color: #888; }
+    input[type=number] { flex: 1; background: var(--preto2); color: var(--cinza2); border: 1px solid var(--cinza1); border-radius: 6px; padding: 8px; font-family: monospace; font-size: clamp(14px, 3vh, 18px); font-weight: bold; text-align: center; min-width: 0; }
+    input[type=number]:focus { outline: none; filter: brightness(1.3); }
     input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
     input[type=number] { -moz-appearance: textfield; }
 

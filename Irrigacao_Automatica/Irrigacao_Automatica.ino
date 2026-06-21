@@ -44,10 +44,10 @@ const char index_html[] PROGMEM = R"rawliteral(
   <meta charset="UTF-8">
   <title>Irrigação Automática</title>
   <style>
-    :root {--destaque: #00ff00; --preto: #0a0a0a; --cinzaE: #1a1a1a; --cinzaC: #333;}
+    :root {--destaque: #00ff00; --preto1: #0a0a0a; --preto2: #1a1a1a; --cinza1: #333; --cinza2: #ccc; --branco: #fff;}
     * { box-sizing: border-box; }
     html { font-size: clamp(14px, 1.2vw, 18px); }
-    body { font-family: 'Segoe UI', Arial, sans-serif; background-color: var(--preto); color: #ddd; margin: 0; padding: 20px; display: flex; justify-content: center; min-height: 100vh;}
+    body { font-family: 'Segoe UI', Arial, sans-serif; background-color: var(--preto1); color: var(--cinza2); margin: 0; padding: 20px; display: flex; justify-content: center; min-height: 100vh;}
 
     /* ── Malha CSS Grid ── */
     .main-container { 
@@ -64,29 +64,29 @@ const char index_html[] PROGMEM = R"rawliteral(
     .graph-wrapper {
       grid-column: 1;
       grid-row: 1 / 3; /* O gráfico ocupa da linha 1 até o final da linha 2 */
-      position: relative; background: #000; border: 1px solid var(--cinzaC); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; min-height: 250px;
+      position: relative; background: var(--preto1); border: 1px solid var(--cinza1); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; min-height: 250px;
     }
     .c-calibra { grid-column: 2; grid-row: 1 / 2; }
     .c-rega    { grid-column: 2; grid-row: 2 / 3; }
 
     /* ── Elementos do Gráfico ── */
     canvas { display: block; width: 100%; flex-grow: 1; }
-    #humOverlay { position: absolute; top: 14px; right: 20px; font-size: clamp(36px, 5vh, 50px); font-weight: bold; color: var(--destaque); text-shadow: 2px 2px 6px #000; z-index: 10; font-family: monospace; }
-    #btnSave { position: absolute; top: 14px; left: 14px; z-index: 10; padding: 10px 16px; font-size: 14px; font-weight: bold; background-color: #2a2a2a; color: white; border: 1px solid var(--cinzaC); border-radius: 6px; cursor: pointer; transition: 0.2s; }
-    #btnSave:hover { background: #3a3a3a; }
-    .btn-saved { background-color: #4CAF50 !important; border-color: #4CAF50 !important; color: #000 !important; }
+    #humOverlay { position: absolute; top: 14px; right: 20px; font-size: clamp(36px, 5vh, 50px); font-weight: bold; color: var(--destaque); text-shadow: 2px 2px 6px var(--preto1); z-index: 10; font-family: monospace; }
+    #btnSave { position: absolute; top: 14px; left: 14px; z-index: 10; padding: 10px 16px; font-size: 14px; font-weight: bold; background-color: var(--preto2); color: var(--branco); border: 1px solid var(--cinza1); border-radius: 6px; cursor: pointer; transition: 0.2s; }
+    #btnSave:hover { filter: brightness(1.4); }
+    .btn-saved { background-color: #4CAF50 !important; border-color: #4CAF50 !important; color: var(--preto1) !important; }
 
     /* ── Cards e Controles ── */
-    .card { background-color: var(--cinzaE); padding: 18px 20px; border-radius: 10px; border-left: 5px solid var(--destaque); box-shadow: 0 4px 10px rgba(0,0,0,0.4); display: flex; flex-direction: column; justify-content: center;}
-    h3 { margin: 0 0 16px 0; font-size: clamp(14px, 3vh, 22px); color: #aaa; border-bottom: 1px solid var(--cinzaC); padding-bottom: 8px; letter-spacing: 1px;}
+    .card { background-color: var(--preto2); padding: 18px 20px; border-radius: 10px; border-left: 5px solid var(--destaque); box-shadow: 0 4px 10px rgba(0,0,0,0.4); display: flex; flex-direction: column; justify-content: center;}
+    h3 { margin: 0 0 16px 0; font-size: clamp(14px, 3vh, 22px); color: var(--cinza2); border-bottom: 1px solid var(--cinza1); padding-bottom: 8px; letter-spacing: 1px;}
   
     .control-row { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
-    .control-row label { width: 60px; font-size: clamp(12px, 2.5vh, 16px); color: #ccc; font-weight: bold; flex-shrink: 0; }
-    .step-btn { background-color: #2a2a2a; color: white; border: 1px solid var(--cinzaC); border-radius: 6px; width: 36px; height: 36px; font-size: 18px; font-weight: bold; cursor: pointer; flex-shrink: 0; transition: 0.2s; }
-    .step-btn:hover { background: #3a3a3a; }
+    .control-row label { width: 60px; font-size: clamp(12px, 2.5vh, 16px); color: var(--cinza2); font-weight: bold; flex-shrink: 0; }
+    .step-btn { background-color: var(--preto2); color: var(--branco); border: 1px solid var(--cinza1); border-radius: 6px; width: 36px; height: 36px; font-size: 18px; font-weight: bold; cursor: pointer; flex-shrink: 0; transition: 0.2s; }
+    .step-btn:hover { filter: brightness(1.4); }
     
-    input[type=number] { flex: 1; background: #2a2a2a; color: #ddd; border: 1px solid var(--cinzaC); border-radius: 6px; padding: 8px; font-family: monospace; font-size: clamp(14px, 3vh, 18px); font-weight: bold; text-align: center; min-width: 0; }
-    input[type=number]:focus { outline: none; border-color: #888; }
+    input[type=number] { flex: 1; background: var(--preto2); color: var(--cinza2); border: 1px solid var(--cinza1); border-radius: 6px; padding: 8px; font-family: monospace; font-size: clamp(14px, 3vh, 18px); font-weight: bold; text-align: center; min-width: 0; }
+    input[type=number]:focus { outline: none; filter: brightness(1.3); }
     input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
     input[type=number] { -moz-appearance: textfield; }
 
@@ -111,7 +111,7 @@ const char index_html[] PROGMEM = R"rawliteral(
   <div class="main-container">
     <div class="graph-wrapper">
       <button id="btnSave" onclick="saveData()">Salvar</button>
-      <div id="humOverlay">0.0 %</div>
+      <div id="humOverlay">0.0%</div>
       <canvas id="plotCanvas"></canvas>
     </div>
     <div class="card c-calibra">
@@ -199,7 +199,7 @@ const char index_html[] PROGMEM = R"rawliteral(
 
     setInterval(function() {
       fetch('/dados').then(res => res.json()).then(data => {
-        document.getElementById('humOverlay').innerText = data.umidade + " %";
+        document.getElementById('humOverlay').innerText = data.umidade + "%";
         dataUmidade.push(data.umidade);
         if(dataUmidade.length > maxPts) dataUmidade.shift();
         drawCanvas();
