@@ -44,10 +44,10 @@ const char index_html[] PROGMEM = R"rawliteral(
   <meta charset="UTF-8">
   <title>Irrigação Automática</title>
   <style>
-    :root {--accent-color: #00ff00; --bg: #0a0a0a; --card-bg: #1a1a1a; --border: #333;}
+    :root {--destaque: #00ff00; --preto: #0a0a0a; --cinzaE: #1a1a1a; --cinzaC: #333;}
     * { box-sizing: border-box; }
     html { font-size: clamp(14px, 1.2vw, 18px); }
-    body { font-family: 'Segoe UI', Arial, sans-serif; background-color: var(--bg); color: #ddd; margin: 0; padding: 20px; display: flex; justify-content: center; min-height: 100vh;}
+    body { font-family: 'Segoe UI', Arial, sans-serif; background-color: var(--preto); color: #ddd; margin: 0; padding: 20px; display: flex; justify-content: center; min-height: 100vh;}
 
     /* ── Malha CSS Grid ── */
     .main-container { 
@@ -64,28 +64,28 @@ const char index_html[] PROGMEM = R"rawliteral(
     .graph-wrapper {
       grid-column: 1;
       grid-row: 1 / 3; /* O gráfico ocupa da linha 1 até o final da linha 2 */
-      position: relative; background: #000; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; min-height: 250px;
+      position: relative; background: #000; border: 1px solid var(--cinzaC); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; min-height: 250px;
     }
     .c-calibra { grid-column: 2; grid-row: 1 / 2; }
     .c-rega    { grid-column: 2; grid-row: 2 / 3; }
 
     /* ── Elementos do Gráfico ── */
     canvas { display: block; width: 100%; flex-grow: 1; }
-    #humOverlay { position: absolute; top: 14px; right: 20px; font-size: clamp(36px, 5vh, 50px); font-weight: bold; color: var(--accent-color); text-shadow: 2px 2px 6px #000; z-index: 10; font-family: monospace; }
-    #btnSave { position: absolute; top: 14px; left: 14px; z-index: 10; padding: 10px 16px; font-size: 14px; font-weight: bold; background-color: #2a2a2a; color: white; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; transition: 0.2s; }
+    #humOverlay { position: absolute; top: 14px; right: 20px; font-size: clamp(36px, 5vh, 50px); font-weight: bold; color: var(--destaque); text-shadow: 2px 2px 6px #000; z-index: 10; font-family: monospace; }
+    #btnSave { position: absolute; top: 14px; left: 14px; z-index: 10; padding: 10px 16px; font-size: 14px; font-weight: bold; background-color: #2a2a2a; color: white; border: 1px solid var(--cinzaC); border-radius: 6px; cursor: pointer; transition: 0.2s; }
     #btnSave:hover { background: #3a3a3a; }
     .btn-saved { background-color: #4CAF50 !important; border-color: #4CAF50 !important; color: #000 !important; }
 
     /* ── Cards e Controles ── */
-    .card { background-color: var(--card-bg); padding: 18px 20px; border-radius: 10px; border-left: 5px solid var(--accent-color); box-shadow: 0 4px 10px rgba(0,0,0,0.4); display: flex; flex-direction: column; justify-content: center;}
-    h3 { margin: 0 0 16px 0; font-size: clamp(14px, 3vh, 22px); color: #aaa; border-bottom: 1px solid var(--border); padding-bottom: 8px; letter-spacing: 1px;}
+    .card { background-color: var(--cinzaE); padding: 18px 20px; border-radius: 10px; border-left: 5px solid var(--destaque); box-shadow: 0 4px 10px rgba(0,0,0,0.4); display: flex; flex-direction: column; justify-content: center;}
+    h3 { margin: 0 0 16px 0; font-size: clamp(14px, 3vh, 22px); color: #aaa; border-bottom: 1px solid var(--cinzaC); padding-bottom: 8px; letter-spacing: 1px;}
   
     .control-row { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
     .control-row label { width: 60px; font-size: clamp(12px, 2.5vh, 16px); color: #ccc; font-weight: bold; flex-shrink: 0; }
-    .step-btn { background-color: #2a2a2a; color: white; border: 1px solid var(--border); border-radius: 6px; width: 36px; height: 36px; font-size: 18px; font-weight: bold; cursor: pointer; flex-shrink: 0; transition: 0.2s; }
+    .step-btn { background-color: #2a2a2a; color: white; border: 1px solid var(--cinzaC); border-radius: 6px; width: 36px; height: 36px; font-size: 18px; font-weight: bold; cursor: pointer; flex-shrink: 0; transition: 0.2s; }
     .step-btn:hover { background: #3a3a3a; }
     
-    input[type=number] { flex: 1; background: #2a2a2a; color: #ddd; border: 1px solid var(--border); border-radius: 6px; padding: 8px; font-family: monospace; font-size: clamp(14px, 3vh, 18px); font-weight: bold; text-align: center; min-width: 0; }
+    input[type=number] { flex: 1; background: #2a2a2a; color: #ddd; border: 1px solid var(--cinzaC); border-radius: 6px; padding: 8px; font-family: monospace; font-size: clamp(14px, 3vh, 18px); font-weight: bold; text-align: center; min-width: 0; }
     input[type=number]:focus { outline: none; border-color: #888; }
     input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
     input[type=number] { -moz-appearance: textfield; }
@@ -138,10 +138,10 @@ const char index_html[] PROGMEM = R"rawliteral(
         <button class="step-btn" onclick="stepValue('limite', 1)">+</button>
       </div>
       <div class="control-row">
-        <label>Timer</label>
-        <button class="step-btn" onclick="stepValue('timer', -1)">-</button>
-        <input type="number" min="1" max="120" id="timer" onchange="sendData()">
-        <button class="step-btn" onclick="stepValue('timer', 1)">+</button>
+        <label>Tempo</label>
+        <button class="step-btn" onclick="stepValue('tempo', -1)">-</button>
+        <input type="number" min="1" max="120" id="tempo" onchange="sendData()">
+        <button class="step-btn" onclick="stepValue('tempo', 1)">+</button>
       </div>
     </div>
   </div>
@@ -184,8 +184,8 @@ const char index_html[] PROGMEM = R"rawliteral(
       let s = document.getElementById('vSeco').value;
       let u = document.getElementById('vUmido').value;
       let l = document.getElementById('limite').value;
-      let t = document.getElementById('timer').value;
-      fetch(`/set?seco=${s}&umido=${u}&limite=${l}&timer=${t}`);
+      let t = document.getElementById('tempo').value;
+      fetch(`/set?seco=${s}&umido=${u}&limite=${l}&tempo=${t}`);
     }
 
     function saveData() {
@@ -252,7 +252,7 @@ void setup() { // SETUP
     String json = "{\"vSeco\":"  + String(valSeco)      +
                   ",\"vUmido\":" + String(valUmido)     +
                   ",\"limite\":" + String(limiteLigar)  +
-                  ",\"timer\":"  + String(tempoMaxRega) + "}";
+                  ",\"tempo\":"  + String(tempoMaxRega) + "}";
     request->send(200, "application/json", json);
   });
 
@@ -270,7 +270,7 @@ void setup() { // SETUP
     if (novoSeco < novoUmido) { valSeco = novoSeco; valUmido = novoUmido; }
 
     if (request->hasParam("limite")) limiteLigar  = request->getParam("limite")->value().toInt();
-    if (request->hasParam("timer"))  tempoMaxRega = request->getParam("timer")->value().toInt();
+    if (request->hasParam("tempo"))  tempoMaxRega = request->getParam("tempo")->value().toInt();
     request->send(200, "text/plain", "OK");
   });
 

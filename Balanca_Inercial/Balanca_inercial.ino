@@ -47,10 +47,10 @@ const char index_html[] PROGMEM = R"rawliteral(
   <meta charset="UTF-8">
   <title>Balança Inercial</title>
   <style>
-    :root {--accent-color: #9c27b0; --bg: #0a0a0a; --card-bg: #1a1a1a; --border: #333;}
+    :root {--destaque: #9c27b0; --preto: #0a0a0a; --cinzaE: #1a1a1a; --cinzaC: #333;}
     * { box-sizing: border-box; }
     html { font-size: clamp(14px, 1.2vw, 18px); }
-    body { font-family: 'Segoe UI', Arial, sans-serif; background-color: var(--bg); color: #ddd; margin: 0; padding: 20px; display: flex; justify-content: center; min-height: 100vh;}
+    body { font-family: 'Segoe UI', Arial, sans-serif; background-color: var(--preto); color: #ddd; margin: 0; padding: 20px; display: flex; justify-content: center; min-height: 100vh;}
 
     .main-container { 
       display: grid; 
@@ -66,29 +66,29 @@ const char index_html[] PROGMEM = R"rawliteral(
       grid-column: 1;
       grid-row: 1 / 3; 
       position: relative;
-      background: #000; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; min-height: 250px;
+      background: #000; border: 1px solid var(--cinzaC); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; min-height: 250px;
     }
     .c-fisica  { grid-column: 2; grid-row: 1 / 2; }
     .c-sensor  { grid-column: 2; grid-row: 2 / 3; }
 
     canvas { display: block; width: 100%; flex-grow: 1; }
     #dataOverlay { position: absolute; top: 14px; right: 20px; font-size: clamp(30px, 4vh, 40px); font-weight: bold; text-shadow: 2px 2px 6px #000; z-index: 10; font-family: monospace; text-align: right; line-height: 1.1;}
-    .data-T { color: var(--accent-color); }
+    .data-T { color: var(--destaque); }
     .data-m { color: #fff; }
     
-    #btnSave { position: absolute; top: 14px; left: 14px; z-index: 10; padding: 10px 16px; font-size: 14px; font-weight: bold; background-color: #2a2a2a; color: white; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; transition: 0.2s; }
+    #btnSave { position: absolute; top: 14px; left: 14px; z-index: 10; padding: 10px 16px; font-size: 14px; font-weight: bold; background-color: #2a2a2a; color: white; border: 1px solid var(--cinzaC); border-radius: 6px; cursor: pointer; transition: 0.2s; }
     #btnSave:hover { background: #3a3a3a; }
     .btn-saved { background-color: #4CAF50 !important; border-color: #4CAF50 !important; color: #000 !important; }
 
-    .card { background-color: var(--card-bg); padding: 18px 20px; border-radius: 10px; border-left: 5px solid var(--accent-color); box-shadow: 0 4px 10px rgba(0,0,0,0.4); display: flex; flex-direction: column; justify-content: center;}
-    h3 { margin: 0 0 16px 0; font-size: clamp(14px, 3vh, 22px); color: #aaa; border-bottom: 1px solid var(--border); padding-bottom: 8px; letter-spacing: 1px;}
+    .card { background-color: var(--cinzaE); padding: 18px 20px; border-radius: 10px; border-left: 5px solid var(--destaque); box-shadow: 0 4px 10px rgba(0,0,0,0.4); display: flex; flex-direction: column; justify-content: center;}
+    h3 { margin: 0 0 16px 0; font-size: clamp(14px, 3vh, 22px); color: #aaa; border-bottom: 1px solid var(--cinzaC); padding-bottom: 8px; letter-spacing: 1px;}
   
     .control-row { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
     .control-row label { width: 80px; font-size: clamp(12px, 2.5vh, 16px); color: #ccc; font-weight: bold; flex-shrink: 0; }
-    .step-btn { background-color: #2a2a2a; color: white; border: 1px solid var(--border); border-radius: 6px; width: 36px; height: 36px; font-size: 18px; font-weight: bold; cursor: pointer; flex-shrink: 0; transition: 0.2s; }
+    .step-btn { background-color: #2a2a2a; color: white; border: 1px solid var(--cinzaC); border-radius: 6px; width: 36px; height: 36px; font-size: 18px; font-weight: bold; cursor: pointer; flex-shrink: 0; transition: 0.2s; }
     .step-btn:hover { background: #3a3a3a; }
     
-    input[type=number] { flex: 1; background: #2a2a2a; color: #ddd; border: 1px solid var(--border); border-radius: 6px; padding: 8px; font-family: monospace; font-size: clamp(14px, 3vh, 18px); font-weight: bold; text-align: center; min-width: 0; }
+    input[type=number] { flex: 1; background: #2a2a2a; color: #ddd; border: 1px solid var(--cinzaC); border-radius: 6px; padding: 8px; font-family: monospace; font-size: clamp(14px, 3vh, 18px); font-weight: bold; text-align: center; min-width: 0; }
     input[type=number]:focus { outline: none; border-color: #888; }
     input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
 

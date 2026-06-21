@@ -43,9 +43,9 @@ int offsetMedio, ganhoMedio;
 int offsetAgudo, ganhoAgudo;
 
 // Estado de temporização
-unsigned long lastActionTime = 0;
-unsigned long timeGrave = 0, timeMedio = 0, timeAgudo = 0;
-unsigned long lastPlotTime  = 0;
+unsigned long tempoUltimaAcao = 0;
+unsigned long tempoGrave = 0, tempoMedio = 0, tempoAgudo = 0;
+unsigned long tempoUltimoGrafico  = 0;
 
 // Picos inter-ciclos: acumulam o maior valor entre transmissões do gráfico
 float picoGrave = 0, picoMedio = 0, picoAgudo = 0;
@@ -104,10 +104,10 @@ const char index_html[] PROGMEM = R"rawliteral(
   <meta charset="UTF-8">
   <title>Controle Musical</title>
   <style>
-    :root {--bg: #0a0a0a; --card-bg: #1a1a1a; --border: #333; }
+    :root {--preto: #0a0a0a; --cinzaE: #1a1a1a; --cinzaC: #333; }
     * { box-sizing: border-box; }
     html { font-size: clamp(14px, 1.2vw, 18px); }
-    body { font-family: 'Segoe UI', Arial, sans-serif; background-color: var(--bg); color: #ddd; margin: 0; padding: 20px; display: flex; justify-content: center; min-height: 100vh;}
+    body { font-family: 'Segoe UI', Arial, sans-serif; background-color: var(--preto); color: #ddd; margin: 0; padding: 20px; display: flex; justify-content: center; min-height: 100vh;}
 
     /* ── Malha CSS Grid ── */
     .main-container { 
@@ -123,8 +123,8 @@ const char index_html[] PROGMEM = R"rawliteral(
     /* ── Posicionamento na Grade ── */
     .graph-wrapper {
       grid-column: 1;
-      grid-row: 1 / 3; /* O gráfico ocupa da linha 1 até o final da linha 2 */
-      position: relative; background: #000; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; min-height: 250px;
+      grid-row: 1 / 3;
+      position: relative; background: #000; border: 1px solid var(--cinzaC); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; min-height: 250px;
     }
     .c-master { grid-column: 1; grid-row: 3; }
     .c-grave  { grid-column: 2; grid-row: 1; }
@@ -133,24 +133,24 @@ const char index_html[] PROGMEM = R"rawliteral(
 
     /* ── Gráfico ── */
     canvas { display: block; width: 100%; flex-grow: 1; }
-    #btnSave { position: absolute; top: 14px; left: 14px; z-index: 10; padding: 10px 16px; font-size: 14px; font-weight: bold; background-color: #2a2a2a; color: white; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; transition: 0.2s; }
+    #btnSave { position: absolute; top: 14px; left: 14px; z-index: 10; padding: 10px 16px; font-size: 14px; font-weight: bold; background-color: #2a2a2a; color: white; border: 1px solid var(--cinzaC); border-radius: 6px; cursor: pointer; transition: 0.2s; }
     #btnSave:hover { background: #3a3a3a; }
     .btn-saved { background-color: #4CAF50 !important; border-color: #4CAF50 !important; color: #000 !important; }
 
     /* ── Cards e Controles ── */
-    .card { background-color: var(--card-bg); padding: 18px 20px; border-radius: 10px; border-left: 5px solid; box-shadow: 0 4px 10px rgba(0,0,0,0.4); display: flex; flex-direction: column; justify-content: center;}
+    .card { background-color: var(--cinzaE); padding: 18px 20px; border-radius: 10px; border-left: 5px solid; box-shadow: 0 4px 10px rgba(0,0,0,0.4); display: flex; flex-direction: column; justify-content: center;}
     .c-master { border-color: #ddd; }
     .c-grave  { border-color: #ff4500; }
     .c-medio  { border-color: #00ff00; }
     .c-agudo  { border-color: #1e90ff; }
-    h3 { margin: 0 0 16px 0; font-size: clamp(14px, 3vh, 22px); color: #aaa; border-bottom: 1px solid var(--border); padding-bottom: 8px; letter-spacing: 1px;}
+    h3 { margin: 0 0 16px 0; font-size: clamp(14px, 3vh, 22px); color: #aaa; border-bottom: 1px solid var(--cinzaC); padding-bottom: 8px; letter-spacing: 1px;}
     
     .control-row { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
     .control-row label { width: 60px; font-size: clamp(12px, 2.5vh, 16px); color: #ccc; font-weight: bold; flex-shrink: 0; }
-    .step-btn { background-color: #2a2a2a; color: white; border: 1px solid var(--border); border-radius: 6px; width: 36px; height: 36px; font-size: 18px; font-weight: bold; cursor: pointer; flex-shrink: 0; transition: 0.2s; }
+    .step-btn { background-color: #2a2a2a; color: white; border: 1px solid var(--cinzaC); border-radius: 6px; width: 36px; height: 36px; font-size: 18px; font-weight: bold; cursor: pointer; flex-shrink: 0; transition: 0.2s; }
     .step-btn:hover { background: #3a3a3a; }
 
-    input[type=number] { flex: 1; background: #2a2a2a; color: #ddd; border: 1px solid var(--border); border-radius: 6px; padding: 8px; font-family: monospace; font-size: clamp(14px, 3vh, 18px); font-weight: bold; text-align: center; min-width: 0; }
+    input[type=number] { flex: 1; background: #2a2a2a; color: #ddd; border: 1px solid var(--cinzaC); border-radius: 6px; padding: 8px; font-family: monospace; font-size: clamp(14px, 3vh, 18px); font-weight: bold; text-align: center; min-width: 0; }
     input[type=number]:focus { outline: none; border-color: #888; }
     input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
     input[type=number] { -moz-appearance: textfield; }
@@ -342,22 +342,22 @@ void setup() { // SETUP
 
 // CONTROLE DE RELÉ
 // Lógica invertida: LOW = relé ligado, HIGH = relé desligado.
-// O blanking global (lastActionTime) impede microfonia pelo clique do relé.
+// O blanking global (tempoUltimaAcao) impede microfonia pelo clique do relé.
 void controlarCanal(int pino, float volume, int limiar, unsigned long &lastOn) {
   unsigned long agora = millis();
-  if (agora - lastActionTime < BLANKING_MS) return;
+  if (agora - tempoUltimaAcao < BLANKING_MS) return;
 
   bool ligado = (digitalRead(pino) == LOW);
   if (ligado) {
     if (volume < limiar && (agora - lastOn > (unsigned long)holdTime)) {
       digitalWrite(pino, HIGH);
-      lastActionTime = agora;
+      tempoUltimaAcao = agora;
     }
   } else {
     if (volume > limiar) {
       digitalWrite(pino, LOW);
       lastOn         = agora;
-      lastActionTime = agora;
+      tempoUltimaAcao = agora;
     }
   }
 }
@@ -368,19 +368,19 @@ void loop() { // LOOP PRINCIPAL
   float picoBlocoG = 0, picoBlocoM = 0, picoBlocoA = 0;
 
   // --- 1. CAPTURA DIGITAL VIA DMA ---
-  static int32_t raw_samples[AMOSTRAS];
-  size_t bytes_lidos;
-  i2s_read(I2S_PORT, raw_samples, sizeof(raw_samples), &bytes_lidos, pdMS_TO_TICKS(20));
-  if (bytes_lidos == 0) return;
+  static int32_t amostrasBrutas[AMOSTRAS];
+  size_t bytesLidos;
+  i2s_read(I2S_PORT, amostrasBrutas, sizeof(amostrasBrutas), &bytesLidos, pdMS_TO_TICKS(20));
+  if (bytesLidos == 0) return;
 
-  int num_samples = bytes_lidos / sizeof(int32_t);
+  int numAmostras = bytesLidos / sizeof(int32_t);
 
   // --- 2. FILTRAGEM ---
-  for (int i = 0; i < num_samples; i++) {
+  for (int i = 0; i < numAmostras; i++) {
     // O INMP441 entrega dados de 24 bits left-justified num word de 32 bits.
     // >> 14 produz valores de 18 bits (±131.072). Os ganhos e offsets da
     // interface compensam essa escala durante a calibração.
-    float raw = (float)(raw_samples[i] >> 14);
+    float raw = (float)(amostrasBrutas[i] >> 14);
 
     // Todos os três filtros são passa-banda, que rejeitam DC por construção
     // matemática (b0 = -b2, b1 = 0 → resposta zero em 0 Hz).
@@ -403,17 +403,17 @@ void loop() { // LOOP PRINCIPAL
   if (volAgudo > picoAgudo) picoAgudo = volAgudo;
 
   // --- 4. CONTROLE DOS RELÉS ---
-  controlarCanal(PINO_RELE_GRAVE, volGrave, limiarGlobal, timeGrave);
-  controlarCanal(PINO_RELE_MEDIO, volMedio, limiarGlobal, timeMedio);
-  controlarCanal(PINO_RELE_AGUDO, volAgudo, limiarGlobal, timeAgudo);
+  controlarCanal(PINO_RELE_GRAVE, volGrave, limiarGlobal, tempoGrave);
+  controlarCanal(PINO_RELE_MEDIO, volMedio, limiarGlobal, tempoMedio);
+  controlarCanal(PINO_RELE_AGUDO, volAgudo, limiarGlobal, tempoAgudo);
 
   // --- 5. TRANSMISSÃO DO GRÁFICO (SSE) ---
-  if (events.count() > 0 && (agora - lastPlotTime > 40)) {
+  if (events.count() > 0 && (agora - tempoUltimoGrafico > 40)) {
     static char jsonBuf[48];
     snprintf(jsonBuf, sizeof(jsonBuf), "{\"g\":%d,\"m\":%d,\"a\":%d}",
             (int)picoGrave, (int)picoMedio, (int)picoAgudo);
     events.send(jsonBuf, "plot", agora);
-    lastPlotTime = agora;
+    tempoUltimoGrafico = agora;
     picoGrave = picoMedio = picoAgudo = 0.0f;
   }
 
