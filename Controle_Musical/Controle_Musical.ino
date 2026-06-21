@@ -14,13 +14,11 @@
 const char* ssid     = "Rede_Comunicacao";
 const char* password = "123456789";
 
-// PINOS DE HARDWARE - INMP441
-#define I2S_WS   19
-#define I2S_SD   32
-#define I2S_SCK  18
-#define I2S_PORT I2S_NUM_0
-
-// PINOS DOS RELÉS
+// PINOS DE HARDWARE - INMP441 e Relés
+const int I2S_WS  = 19;
+const int I2S_SD  = 32;
+const int I2S_SCK = 18;
+const i2s_port_t I2S_PORT = I2S_NUM_0;
 const int PINO_RELE_GRAVE = 25;
 const int PINO_RELE_MEDIO = 26;
 const int PINO_RELE_AGUDO = 27;
